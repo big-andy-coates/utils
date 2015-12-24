@@ -3,6 +3,7 @@
 *.iml
 *.ipr
 *.iws
+/build
 
 *.class
 hs_err_pid*
