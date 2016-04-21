@@ -27,9 +27,6 @@ sourceCompatibility = 1.8
 
 //noinspection GroovyAssignabilityCheck
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'com.google.guava:guava:18.0'
-
     testCompile 'org.hamcrest:hamcrest-all:1.3'
     testCompile ('junit:junit:4.12') {
         exclude module: 'hamcrest-core'

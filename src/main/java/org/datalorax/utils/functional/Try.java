@@ -17,21 +17,19 @@
 
 package org.datalorax.utils.functional;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Supplier;
-import org.apache.commons.lang3.Validate;
-
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * The Try type represents a computation that may either result in an exception, or return a successfully computed value.
  * It's similar to, but semantically different from the {@link Either} type.
  * <p>
  * It was inspired by Scala's Try type.
- *
+ * <p>
  * It is immutable.
  * <p>
  * Instances of Try&lt;T&gt; are created via either {@link #success(Object)} or {@link #failure(Exception)}.
@@ -46,7 +44,7 @@ import java.util.function.Function;
  * <p>
  * The {@link Try.Failure} wraps an {@link Exception}, rather than the {@link Throwable} that the Scala {@code Try} type
  * wraps. This is because I believe {@link Error}s should not generally be caught.
- *
+ * <p>
  * The type allows you to more explicitly handle exceptions and chain together operations, where some may fail / throw:
  * <p>
  * <pre>
@@ -64,9 +62,9 @@ import java.util.function.Function;
  *      return text.recover(e -> "Failed to get thing. Cause: " + e.getMessage());
  *   }
  *  </pre>
- *
- *  The above can be more succinctly written as:
- *
+ * <p>
+ * The above can be more succinctly written as:
+ * <p>
  * <pre>
  * {@code
  *   String foo() {
@@ -418,7 +416,7 @@ public interface Try<T> {
     /**
      * Call either the supplied {@code onSuccess} or {@code onFailure} {@link Consumer 'consumers'},
      * depending on whether the instance is successful or a failure.
-     *
+     * <p>
      * Any exception thrown by the executed function is left to propagate out.
      *
      * @param onSuccess the consumer to call on success.
@@ -529,12 +527,12 @@ public interface Try<T> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             final Success<?> success = (Success<?>) o;
-            return Objects.equal(value, success.value);
+            return Objects.equals(value, success.value);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(value);
+            return Objects.hash(value);
         }
     }
 
@@ -543,7 +541,9 @@ public interface Try<T> {
 
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
         public Failure(final Exception exception) {
-            Validate.notNull(exception, "exception empty");
+            if (exception == null) {
+                throw new NullPointerException("exception");
+            }
             this.exception = exception;
         }
 
@@ -644,12 +644,12 @@ public interface Try<T> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             final Failure<?> failure = (Failure<?>) o;
-            return Objects.equal(exception, failure.exception);
+            return Objects.equals(exception, failure.exception);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(exception);
+            return Objects.hash(exception);
         }
     }
 
